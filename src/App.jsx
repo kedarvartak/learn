@@ -3,10 +3,14 @@ import './App.css'
 import Homepage from './components/Homepage'
 import Header from './components/Header'
 import FileDisplay from './components/FileDisplay'
+import Information from './components/Information'
+import Transcribing from './components/Transcribing'
 
 function App() {
   const [file, setfile] = useState(null)
   const [audioStream, setaudioStream] = useState(null)
+  const [output, setOutput] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   const isAudioAvailable = file || audioStream
 
@@ -15,18 +19,21 @@ function App() {
     setaudioStream(null)
   }
 
-  useEffect(() => {
-    console.log(audioStream);
-  }, [audioStream])
-
   return (
     <div class="flex flex-col  max-w-[1000px] mx-auto w-full">
       <section class="min-h-screen flex flex-col">
         <Header/>
-        {isAudioAvailable ? (
-          <FileDisplay handleaudioReset={handleaudioReset} file={file} audiostream ={setaudioStream}/>
-        ) : (
-        <Homepage setfile={setfile} setaudioStream={setaudioStream}/>)}
+        {
+          output ? (
+            <Information/>
+          ) : loading ? (
+            <Transcribing/>
+          ) : isAudioAvailable ? (
+            <FileDisplay handleaudioReset={handleaudioReset} file={file} audiostream ={audioStream}/>
+          ) : (
+            <Homepage setfile={setfile} setaudioStream={setaudioStream}/>
+          )
+        }
       </section>
       
       <footer>
